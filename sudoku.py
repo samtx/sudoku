@@ -94,9 +94,25 @@ def check_nine(num_list):
     return True
 
 def solve_main(puzzle_filename):
+    # get puzzle from file
     puzzle_mat = read_puzzle(puzzle_filename)
-    
+    # make dictionary of possible options for each remaining number
+    solve_puzzle(puzzle_mat)
     return 
+
+def solve_puzzle(puzzle_mat):
+    # create empty dictionary for pencil answers
+    pencil = {}
+    # loop through puzzle_mat and fill in pencil dictionary
+    full_nine = range(1,10)
+    for i in range(9):
+        for j in range(9):
+            if puzzle_mat[i,j] == 0:
+                pencil[(i,j)]=full_nine
+            else:
+                pencil[(i,j)]=puzzle_mat[i,j]
+    # now sweep the columns and rows
+    return
 
 def read_puzzle(puzzle_filename):
     # read puzzle sequence from file
