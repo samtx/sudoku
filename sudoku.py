@@ -40,7 +40,6 @@ def add_row(mat,row_num):
             iter = iter + 1
             #if iter % 1000 == 0: print 'iter=',iter
             if iter > 100: break
-            #print next_line
             # check col and square, either fails then rotate
             index = (row_num,col_num)
             new_num = next_line[0]
@@ -53,7 +52,6 @@ def add_row(mat,row_num):
                 continue
             else: 
                 tmp = next_line.popleft()
-                #print '(',row_num,',',col_num,') = ',tmp
                 mat[row_num,col_num] = tmp
                 col_num = col_num + 1
                 if len(next_line) == 0: row_complete = True
@@ -68,31 +66,21 @@ def check_square(mat,index,new_num):
     col_sq_begin = ((col_num)//3)*3
     col_sq_end = col_sq_begin + 3
     square = mat[row_sq_begin:row_sq_end,col_sq_begin:col_sq_end]
-    #print square
     num_list = np.ravel(square).tolist()
     # remove zeros
     for i in num_list:
         if i == 0: num_list.remove(i)
     return check_numlist(num_list,new_num)
-
-def check_row(mat,row_num):
-    ''' Check the row of the particular row number '''
-    row = mat[row_num][:].tolist()
-    for i in range(1,10):
-        if row.count(i) != 1: return False
-    return True
     
 def check_column(mat,index,new_num):
-    ''' check the column '''
+    ''' check the column that no numbers repeat '''
     row_num = index[0]
     col_num = index[1]
     num_list = mat[:row_num,col_num].tolist()
     return check_numlist(num_list,new_num)
 
 def check_numlist(num_list,new_num):
-    #print "CHECK NUMLIST>>>"
-    #print 'num_list',num_list
-    #print 'new_num',new_num
+    ''' Check to see if the new_num already exists in the num_list '''
     if num_list.count(new_num) > 0:
         return False
     return True
@@ -105,4 +93,27 @@ def check_nine(num_list):
         else: return False
     return True
 
-generate_puzzle()
+def solve_main(puzzle_filename):
+    puzzle_mat = read_puzzle(puzzle_filename)
+    
+    return 
+
+def read_puzzle(puzzle_filename):
+    # read puzzle sequence from file
+    with open(puzzle_filename, 'r') as f:
+        puzzle_data = f.read()
+    # form matrix with puzzle sequence
+    puzzle_string = ""
+    for i in puzzle_data:
+        puzzle_string = puzzle_string + i + ","
+    #remove trailing comma
+    puzzle_string = puzzle_string.rstrip(",")
+    #convert to 1-D array
+    puzzle_array = np.fromstring(puzzle_string,dtype=int,sep=',')
+    #reshape 1-D array to 9x9 square array
+    puzzle_mat = np.reshape(puzzle_array,(9,9))
+    print puzzle_mat
+    return puzzle_mat
+
+solve_main("./puzzle01.txt")
+#generate_puzzle()
